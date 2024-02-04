@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>
+    Выбираем корабль и дату полета
+  </title>
+  <style>
+    .errorlist {
+      list-style-type: none;
+      font-family: Calibri;
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <div class='container'>
+    <h2>
+      Заказ полета
+    </h2>
+    <form actions="" method="POST">
+      {% csrf_token %}
+      {{ space_form.non_field_errors }}
+      <!-- название всего поля (всей группы радиокнопок)-->
+      {{ space_form.ship.label }}
+      <!-- запускаем цикл == перебираем все радиокнопки и адреса картинок -->
+      {% for radiobutton, img_url in ship_field %}
+        <!-- рендерим саму кнопку -->
+        {{ radiobutton.tag }}
+        <!-- рендерим подпись, переопределив тег label, чтобы добавить новый -->
+        <label for="{{ radiobutton.id_for_label }}">
+          {{ radiobutton.choice_label }}
+          <!-- рендерим картинку, прикрепленную к записи из Spaceship -->
+          <img src="{{ img_url }}" style="width: 200px; height: auto;">
+        </label>
+      {% endfor %}
+      <!-- рендерим поле выбора даты -->
+      <div style="margin-top: 30px;">
+        {{ space_form.flight_date.label }}
+        {{ space_form.flight_date }}
+        <!-- под полем отобразится сообщение об ошибке, если на бэк попадут невалидные данные -->
+        {{ space_form.flight_date.errors }}
+      </div>
+      <div style="margin-top: 30px;">
+        {{ space_form.currency.label }}
+        {{ space_form.currency }}
+      </div>
+      <div style="margin-top: 10px;">
+        <button type="submit">
+          Оформить заказ
+         </button>
+      </div>
+    </form>
+  </div>
+</body>
+</html>
